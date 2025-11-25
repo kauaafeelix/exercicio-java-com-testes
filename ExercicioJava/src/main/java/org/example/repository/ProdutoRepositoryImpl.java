@@ -27,12 +27,12 @@ public class ProdutoRepositoryImpl implements ProdutoRepository{
             ps.setInt(3, produto.getQuantidade());
             ps.setString(4, produto.getCategoria());
             ps.executeUpdate();
-            try (ResultSet rs = ps.getGeneratedKeys()) {
+
+            ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
                     int id = rs.getInt(1);
                     produto.setId(id);
                 }
-            }
         }
         return produto;
     }
@@ -41,8 +41,13 @@ public class ProdutoRepositoryImpl implements ProdutoRepository{
     public List<Produto> findAll() throws SQLException {
         List<Produto>produtos = new ArrayList<>();
         String sql = """
-                SELECT id, nome, preco, quantidade, categoria
+                SELECT id, 
+                nome, 
+                preco, 
+                quantidade, 
+                categoria
                 FROM produto
+                WHERE 1=1
                 """;
 
         try (Connection conn = ConexaoBanco.conectar();
